@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.owner;
 
 import java.util.Collection;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -59,5 +60,13 @@ public interface OwnerRepository extends Repository<Owner, Integer> {
      */
     void save(Owner owner);
 
+    /**
+     * Delete an {@link Owner} from the data by his id.
+     * @param id the id of the owner to delete
+     * @return the {@link Owner} if found
+     */
+    @Modifying
+    @Transactional
+    void deleteById(@Param("id") Integer id);
 
 }
