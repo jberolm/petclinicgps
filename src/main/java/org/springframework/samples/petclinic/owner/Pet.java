@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -52,6 +53,12 @@ public class Pet extends NamedEntity {
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+    
+    @Column(name = "weight")
+    private float weight;
+    
+    @Column(name = "comments")
+    private String comments;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
@@ -64,7 +71,23 @@ public class Pet extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "petId", fetch = FetchType.EAGER)
     private Set<Visit> visits = new LinkedHashSet<>();
 
-    public void setBirthDate(LocalDate birthDate) {
+    public float getWeight() {
+		return weight;
+	}
+
+	public void setWeight(float weight) {
+		this.weight = weight;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
