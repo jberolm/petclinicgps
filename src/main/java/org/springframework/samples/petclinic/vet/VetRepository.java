@@ -41,6 +41,13 @@ public interface VetRepository extends Repository<Vet, Integer> {
     @Transactional(readOnly = true)
     @Cacheable("vets")
     Collection<Vet> findAll() throws DataAccessException;
-
+    
+    /**
+     * Retrieve a {@link Vet} from the data store by id.
+     * @param id the id to search for
+     * @return the {@link Vet} if found
+     */
+    @Transactional(readOnly = true)
+    Vet findById(Integer id);
 
 }
