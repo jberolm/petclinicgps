@@ -84,5 +84,23 @@ class VisitController {
             return "redirect:/owners/{ownerId}";
         }
     }
+    
+    @GetMapping("/owners/{ownerId}/pets/{petId}/visits/{visitId}/edit")
+    public String initEditVisitForm(@PathVariable("visitId") int visitId, Map<String, Object> model) { 	
+    	Visit visit = this.visits.findById(visitId);
+    	model.put("visit", visit);        
+        return "pets/createOrUpdateVisitForm";
+    }
+
+    @PostMapping("/owners/{ownerId}/pets/{petId}/visits/{visitId}/edit")
+    public String processEditVisitForm(@Valid Visit visit, @PathVariable("visitId") int visitId, BindingResult result) {
+        if (result.hasErrors()) {
+            return "pets/createOrUpdateVisitForm";
+        } else {
+        	visit.setId(visitId);
+        	this.visits.save(visit);
+        	return "redirect:/owners/{ownerId}";
+        }
+    }
 
 }
