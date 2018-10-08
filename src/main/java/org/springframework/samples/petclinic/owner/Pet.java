@@ -68,7 +68,7 @@ public class Pet extends NamedEntity {
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "petId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "petId", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Visit> visits = new LinkedHashSet<>();
 
     public float getWeight() {

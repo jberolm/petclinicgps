@@ -17,8 +17,10 @@ package org.springframework.samples.petclinic.owner;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -53,6 +55,14 @@ public interface PetRepository extends Repository<Pet, Integer> {
      * @param pet the {@link Pet} to save
      */
     void save(Pet pet);
+    
+    @Modifying
+    @Transactional
+    @Query("delete from Pet p where p.id = ?1")
+    void deletePetInfo(Integer entityId);
 
+    @Modifying
+    @Transactional
+    void delete(Pet pet);
 }
 
