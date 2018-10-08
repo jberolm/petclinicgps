@@ -32,6 +32,16 @@
 				th:replace="~{fragments/inputField :: input ('Date', 'date', 'date')}" />
 			<input
 				th:replace="~{fragments/inputField :: input ('Description', 'description', 'text')}" />
+			
+		<div class="form-group">
+	        <label class="col-sm-2 control-label">Vet</label>
+	        <div class="col-sm-10">
+	            <div>
+	                <select class="form-control" th:field="*{vet.id}"  id="vetSelect">
+	    				<option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.firstName}"></option>
+	    			</select>                
+	            </div>          
+	        </div>
 		</div>
 
 		<div class="form-group">

@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.samples.petclinic.visit.Visit;
 import org.springframework.samples.petclinic.visit.VisitRepository;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -37,11 +41,18 @@ class VisitController {
 
     private final VisitRepository visits;
     private final PetRepository pets;
+    private final VetRepository vets;
 
 
-    public VisitController(VisitRepository visits, PetRepository pets) {
+    public VisitController(VisitRepository visits, PetRepository pets, VetRepository vets) {
         this.visits = visits;
         this.pets = pets;
+        this.vets = vets;
+    }
+    
+    @ModelAttribute("vets")
+    public Collection<Vet> populateVets() {
+        return this.vets.findAll();
     }
 
     @InitBinder
