@@ -19,6 +19,7 @@ import java.util.Collection;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +50,8 @@ public interface VetRepository extends Repository<Vet, Integer> {
      */
     @Transactional(readOnly = true)
     Vet findById(Integer id);
-
+    
+    @Query("SELECT specialty FROM Specialty specialty ORDER BY specialty.name")
+    @Transactional(readOnly = true)
+    public Collection<Specialty> findSpecialties();
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -68,6 +69,13 @@ class VetController {
         ModelAndView mav = new ModelAndView("vets/vetDetails");
         mav.addObject(this.vets.findById(vetId));
         return mav;
+    }
+    
+    @GetMapping("/vets/vetSpecialties")
+    public String showVetSpecialties(Map<String, Object> model) {
+        Collection <Specialty> specialties = this.vets.findSpecialties();
+        model.put("specialties", specialties);
+        return "vets/vetSpecialties";
     }
 
 }
