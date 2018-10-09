@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -64,5 +65,9 @@ public interface PetRepository extends Repository<Pet, Integer> {
     @Modifying
     @Transactional
     void delete(Pet pet);
+    
+    
+    @Query("SELECT DISTINCT pet FROM Pet pet WHERE pet.name LIKE %:name%")
+    @Transactional(readOnly = true)
+    public Collection<Pet> findPetsByName(@Param("name")String name);
 }
-

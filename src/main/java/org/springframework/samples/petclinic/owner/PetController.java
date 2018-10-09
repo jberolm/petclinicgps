@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Juergen Hoeller
@@ -114,6 +115,31 @@ class PetController {
         
         
         return "redirect:/owners/{ownerId}";
+    }
+    
+    @GetMapping("/pets/find")
+    public String initFindForm(Map<String, Object> model) {
+        model.put("pet", new Pet());
+        return "pets/findPets";
+    }
+
+    @GetMapping("/pets")
+    public String processFindForm(Pet pet, BindingResult result, Map<String, Object> model) {
+
+        // allow parameterless GET request for /pets to return all records
+        if (pet.getName() == null) {
+            pet.setName(""); // empty string signifies broadest possible search
+        }
+
+        // find pets
+        Collection<Pet> results = this.pets.findPetsByName(pet.getName());
+        if (results.isEmpty()) {
+            result.rejectValue("name", "notFound", "not found");
+            return "pets/findPets";
+        } else {
+            model.put("selections", results);
+            return "pets/petsList";
+        }
     }
 
 }
