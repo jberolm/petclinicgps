@@ -16,13 +16,22 @@
 package org.springframework.samples.petclinic.vet;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
+
 
 /**
  * @author Juergen Hoeller
@@ -76,6 +85,38 @@ class VetController {
         Collection <Specialty> specialties = this.vets.findSpecialties();
         model.put("specialties", specialties);
         return "vets/vetSpecialties";
+    }
+    
+    
+    @ModelAttribute("specialties")
+    public Collection<Specialty> populateSpecialties() {
+        return this.vets.findSpecialties();
+    }
+
+    @GetMapping("/vets/new")
+    public String initCreationForm(Map<String, Object> model) {
+        Vet vet = new Vet();
+        model.put("vet", vet);        
+        return "vets/createOrUpdateVetForm";
+    }
+
+    @PostMapping("/vets/new")
+    public String processCreationForm(@Valid Vet vet, BindingResult result, @RequestParam(required=false, name="specialties") String specialties) {
+        if (result.hasErrors()) {
+            return "vets/createOrUpdateVetForm";
+        } else {
+        	
+        	if (specialties!=null && specialties.length()>0) {
+	        	List<String> items = Arrays.asList(specialties.split("\\s*,\\s*"));
+	        	for (String string : items) {
+	        		vet.addSpecialty(this.vets.findSpecialtyById(Integer.parseInt(string)));
+				}
+        	}
+        	
+        	
+            this.vets.save(vet);
+            return "redirect:/vets.html";
+        }
     }
 
 }
