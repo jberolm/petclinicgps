@@ -15,29 +15,102 @@
  */
 package org.springframework.samples.petclinic.vet;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.springframework.util.SerializationUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author Dave Syer
- *
- */
 public class VetTests {
-
+	
+	public static Vet vet;
+	public static Vet vet2;
+	
+	@BeforeClass
+	//This method is called before executing this suite
+	public static void initClass() {
+		vet = new Vet();
+		vet.setFirstName("Juan Manuel");
+		vet.setLastName("Murillo");
+	}
+	
+	@Before
+	//This test is executed before each test created in this suite
+	public void init() {
+		vet.setHomeVisits(false);
+	}
+	
+	@Test
+	public void testVet() {
+		assertNotNull(vet);				
+	}
+	
+	@Test
+	public void testVet2() {
+		assertNull(vet2);				
+	}
+	
+	@Test
+	public void testFirstName() {
+		assertNotNull(vet.getFirstName());
+		assertNotEquals(vet.getFirstName(), "JuanMa");
+		assertEquals(vet.getFirstName(), "Juan Manuel");		
+	}
+	
+	@Test
+	public void testLastName() {
+		assertNotNull(vet.getLastName());
+		assertEquals(vet.getLastName(), "Murillo");
+		assertNotEquals(vet.getLastName(), "Rodríguez");		
+	}
+	
+	@Test
+	public void testHomeVisits() {
+		assertNotNull(vet.getHomeVisits());
+		assertFalse(vet.getHomeVisits());
+	}
+	
     @Test
     public void testSerialization() {
-        Vet vet = new Vet();
-        vet.setFirstName("Zaphod");
-        vet.setLastName("Beeblebrox");
-        vet.setId(123);
+    	Vet vet3 = new  Vet();
+        vet3.setFirstName("Zaphod");
+        vet3.setLastName("Beeblebrox");
+        vet3.setId(123);
         Vet other = (Vet) SerializationUtils
-                .deserialize(SerializationUtils.serialize(vet));
-        assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());
-        assertThat(other.getLastName()).isEqualTo(vet.getLastName());
-        assertThat(other.getId()).isEqualTo(vet.getId());
+                .deserialize(SerializationUtils.serialize(vet3));
+        assertThat(other.getFirstName()).isEqualTo(vet3.getFirstName());
+        assertThat(other.getLastName()).isEqualTo(vet3.getLastName());
+        assertThat(other.getId()).isEqualTo(vet3.getId());
     }
+    
+	@Ignore
+	//This test is not executed
+	public void ignore() {
+		vet.setFirstName("JuanMa");
+	}
+    
+    @After
+    //This test is executed after each test created in this suite
+    public void finish() {
+    	vet.setHomeVisits(true);
+    }
+    
+    @AfterClass
+    //This method is executed after all the tests included in this suite are completed.
+    public static void finishClass() {
+    	vet = null;
+    }
+    
 
 }

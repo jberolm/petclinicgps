@@ -17,8 +17,13 @@ package org.springframework.samples.petclinic.vet;
 
 import java.util.Collection;
 
+import javax.cache.annotation.CacheRemove;
+import javax.cache.annotation.CacheRemoveAll;
+
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +37,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 public interface VetRepository extends Repository<Vet, Integer> {
+	
+	/**
+     * Save a {@link Vet} to the data store, either inserting or updating it.
+     * @param vet the {@link Vet} to save
+     */
+	@CacheEvict (value = "vets", allEntries = true)
+    void save(Vet vet)  throws DataAccessException;;
 
     /**
      * Retrieve all <code>Vet</code>s from the data store.
@@ -41,6 +53,22 @@ public interface VetRepository extends Repository<Vet, Integer> {
     @Transactional(readOnly = true)
     @Cacheable("vets")
     Collection<Vet> findAll() throws DataAccessException;
-
-
+    
+    /**
+     * Retrieve a {@link Vet} from the data store by id.
+     * @param id the id to search for
+     * @return the {@link Vet} if found
+     */
+    @Transactional(readOnly = true)
+    Vet findById(Integer id);
+    
+    @Query("SELECT specialty FROM Specialty specialty ORDER BY specialty.name")
+    @Transactional(readOnly = true)
+    public Collection<Specialty> findSpecialties();
+   
+    @Query ("SELECT specialty FROM Specialty specialty WHERE specialty.id = :id")
+    @Transactional(readOnly = true)
+    public Specialty findSpecialtyById(Integer id);
+    
+    
 }

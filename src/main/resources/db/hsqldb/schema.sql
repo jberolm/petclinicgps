@@ -10,7 +10,8 @@ DROP TABLE owners IF EXISTS;
 CREATE TABLE vets (
   id         INTEGER IDENTITY PRIMARY KEY,
   first_name VARCHAR(30),
-  last_name  VARCHAR(30)
+  last_name  VARCHAR(30),
+  home_visits BOOLEAN
 );
 CREATE INDEX vets_last_name ON vets (last_name);
 
@@ -47,6 +48,8 @@ CREATE TABLE pets (
   id         INTEGER IDENTITY PRIMARY KEY,
   name       VARCHAR(30),
   birth_date DATE,
+  weight	 float,
+  comments	 varchar(200),
   type_id    INTEGER NOT NULL,
   owner_id   INTEGER NOT NULL
 );
@@ -57,8 +60,10 @@ CREATE INDEX pets_name ON pets (name);
 CREATE TABLE visits (
   id          INTEGER IDENTITY PRIMARY KEY,
   pet_id      INTEGER NOT NULL,
+  vet_id	  INTEGER NOT NULL,
   visit_date  DATE,
   description VARCHAR(255)
 );
 ALTER TABLE visits ADD CONSTRAINT fk_visits_pets FOREIGN KEY (pet_id) REFERENCES pets (id);
+ALTER TABLE visits ADD CONSTRAINT fk_visits_vets FOREIGN KEY (vet_id) REFERENCES vets (id);
 CREATE INDEX visits_pet_id ON visits (pet_id);

@@ -12,16 +12,23 @@
       <tr>
         <th>Name</th>
         <th>Specialties</th>
+        <th>Home Visits</th>
       </tr>
     </thead>
     <tbody>
       <tr th:each="vet : ${vets.vetList}">
-        <td th:text="${vet.firstName + ' ' + vet.lastName}"></td>
+   		<td>
+            <a th:href="@{/vets/__${vet.id}__}" th:text="${vet.firstName + ' ' + vet.lastName}"/></a>
+        </td>
         <td><span th:each="specialty : ${vet.specialties}"
           th:text="${specialty.name + ' '}" /> <span
           th:if="${vet.nrOfSpecialties == 0}">none</span></td>
+         <td th:text="${vet.homeVisits} ? 'Yes' : 'No'"> </td>
       </tr>
     </tbody>
   </table>
+  
+  <br />
+  <a class="btn btn-default" th:href="@{/vets/new}">Add Vet</a>
 </body>
 </html>

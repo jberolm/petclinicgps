@@ -30,6 +30,8 @@
   
     <a th:href="@{{id}/edit(id=${owner.id})}" class="btn btn-default">Edit
       Owner</a>
+    <a th:href="@{{id}/delete(id=${owner.id})}" class="btn btn-default">Delete
+      Owner</a>
     <a th:href="@{{id}/pets/new(id=${owner.id})}" class="btn btn-default">Add
       New Pet</a>
   
@@ -58,11 +60,15 @@
               <tr>
                 <th>Visit Date</th>
                 <th>Description</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tr th:each="visit : ${pet.visits}">
               <td th:text="${#temporals.format(visit.date, 'yyyy-MM-dd')}"></td>
               <td th:text="${visit?.description}"></td>
+              <td><a
+                th:href="@{{ownerId}/pets/{petId}/visits/{visitId}/edit(ownerId=${owner.id},petId=${pet.id}, visitId=${visit.id})}">Edit</a>
+                  </td>
             </tr>
             <tr>
               <td><a
@@ -71,6 +77,7 @@
               <td><a
                 th:href="@{{ownerId}/pets/{petId}/visits/new(ownerId=${owner.id},petId=${pet.id})}">Add
                   Visit</a></td>
+               <td/>
             </tr>
           </table>
         </td>
